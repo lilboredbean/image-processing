@@ -74,7 +74,10 @@ def main():
     # st.title("Real Time Face Emotion Detection Application")
     activities = ["Webcam Face Detection", "About"]
     choice = st.sidebar.selectbox("Select Activity", activities)
-    st.sidebar.markdown()
+    st.sidebar.markdown(
+        """ Developed by Shrimanta Satpati    
+            Email : satpatishrimanta@gmail.com  
+        """)
     if choice == "Webcam Face Detection":
         html_temp_home1 = """<div style="background-color:#6D7B8D;padding:10px">
                                             <h4 style="color:white;text-align:center;">
