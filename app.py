@@ -20,7 +20,7 @@ def overlay_text_on_frame(frame, texts):
 
     text_position = 15 # Where the first text is put into the overlay
     for text in texts:
-        cv2.putText(frame, text, (10, text_position), cv2.FONT_GEORGIA, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
+        cv2.putText(frame, text, (10, text_position), cv2.FONT_HERSHEY_TRIPLE, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
         text_position += 20
 
     return frame
