@@ -20,7 +20,7 @@ def overlay_text_on_frame(frame, texts):
 
     text_position = 15 # Where the first text is put into the overlay
     for text in texts:
-        cv2.putText(frame, text, (10, text_position), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
+        cv2.putText(frame, text, (10, text_position), cv2.FONT_GEORGIA, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
         text_position += 20
 
     return frame
@@ -71,37 +71,38 @@ def facesentiment():
 
 def main():
     # Face Analysis Application #
-    # st.title("Real Time Face Emotion Detection Application")
-    activities = ["Webcam Face Detection", "About"]
-    choice = st.sidebar.selectbox("Select Activity", activities)
-    st.sidebar.markdown(
-        """ Developed by Shrimanta Satpati    
-            Email : satpatishrimanta@gmail.com  
-        """)
-    if choice == "Webcam Face Detection":
-        html_temp_home1 = """<div style="background-color:#6D7B8D;padding:10px">
-                                            <h4 style="color:white;text-align:center;">
-                                            Real time face emotion recognition of webcam feed using OpenCV, DeepFace and Streamlit.</h4>
-                                            </div>
-                                            </br>"""
-        st.markdown(html_temp_home1, unsafe_allow_html=True)
-        facesentiment()
+    st.title("Real Time Face Emotion Detection Application")
+    facesentiment()
+    # activities = ["Webcam Face Detection", "About"]
+    # choice = st.sidebar.selectbox("Select Activity", activities)
+    # st.sidebar.markdown(
+    #     """ Developed by Shrimanta Satpati    
+    #         Email : satpatishrimanta@gmail.com  
+    #     """)
+    # if choice == "Webcam Face Detection":
+    #     html_temp_home1 = """<div style="background-color:#6D7B8D;padding:10px">
+    #                                         <h4 style="color:white;text-align:center;">
+    #                                         Real time face emotion recognition of webcam feed using OpenCV, DeepFace and Streamlit.</h4>
+    #                                         </div>
+    #                                         </br>"""
+    #     st.markdown(html_temp_home1, unsafe_allow_html=True)
+    #     facesentiment()
 
-    elif choice == "About":
-        st.subheader("About this app")
+    # elif choice == "About":
+    #     st.subheader("About this app")
 
-        html_temp4 = """
-                                     		<div style="background-color:#98AFC7;padding:10px">
-                                     		<h4 style="color:white;text-align:center;">This Application is developed by Shrimanta Satpati. </h4>
-                                     		<h4 style="color:white;text-align:center;">Thanks for Visiting</h4>
-                                     		</div>
-                                     		<br></br>
-                                     		<br></br>"""
+    #     html_temp4 = """
+    #                                  		<div style="background-color:#98AFC7;padding:10px">
+    #                                  		<h4 style="color:white;text-align:center;">This Application is developed by Shrimanta Satpati. </h4>
+    #                                  		<h4 style="color:white;text-align:center;">Thanks for Visiting</h4>
+    #                                  		</div>
+    #                                  		<br></br>
+    #                                  		<br></br>"""
 
-        st.markdown(html_temp4, unsafe_allow_html=True)
+    #     st.markdown(html_temp4, unsafe_allow_html=True)
 
-    else:
-        pass
+    # else:
+    #     pass
 
 if __name__ == "__main__":
     main()
