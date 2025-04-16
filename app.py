@@ -52,12 +52,12 @@ def facesentiment():
 
         # Overlay white rectangle with text on the frame
         texts = [
-            f"Age: {result[0]['age']}",
-            f"Face Confidence: {round(result[0]['face_confidence'],3)}",
+            f"👤 Age: {result[0]['age']}",
+            f"📷 Face Confidence: {round(result[0]['face_confidence'],3)}",
             # f"Gender: {result[0]['dominant_gender']} {result[0]['gender'][result[0]['dominant_gender']]}",
-            f"Gender: {result[0]['dominant_gender']} {round(result[0]['gender'][result[0]['dominant_gender']], 3)}",
-            f"Race: {result[0]['dominant_race']}",
-            f"Dominant Emotion: {result[0]['dominant_emotion']} {round(result[0]['emotion'][result[0]['dominant_emotion']], 1)}",
+            f"⚧ Gender: {result[0]['dominant_gender']} {round(result[0]['gender'][result[0]['dominant_gender']], 3)}",
+            f"🌍 Race: {result[0]['dominant_race']}",
+            f"😊 Dominant Emotion: {result[0]['dominant_emotion']} {round(result[0]['emotion'][result[0]['dominant_emotion']], 1)}",
         ]
 
         frame_with_overlay = overlay_text_on_frame(frame_rgb, texts)
@@ -71,7 +71,7 @@ def facesentiment():
 
 def main():
     # Face Analysis Application #
-    st.title("Real Time Face Emotion Detection Application")
+    st.title("🎥 Real Time Face Emotion Detection Application")
     facesentiment()
     # activities = ["Webcam Face Detection", "About"]
     # choice = st.sidebar.selectbox("Select Activity", activities)
