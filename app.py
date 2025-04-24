@@ -65,44 +65,10 @@ def facesentiment():
         # Display the frame in Streamlit
         stframe.image(frame_with_overlay, channels="RGB")
 
-    # Release the webcam and close all windows
-    cap.release()
-    cv2.destroyAllWindows()
-
 def main():
     # Face Analysis Application #
     st.title("🎥 Real Time Emotion Detection")
     facesentiment()
-    # activities = ["Webcam Face Detection", "About"]
-    # choice = st.sidebar.selectbox("Select Activity", activities)
-    # st.sidebar.markdown(
-    #     """ Developed by Shrimanta Satpati    
-    #         Email : satpatishrimanta@gmail.com  
-    #     """)
-    # if choice == "Webcam Face Detection":
-    #     html_temp_home1 = """<div style="background-color:#6D7B8D;padding:10px">
-    #                                         <h4 style="color:white;text-align:center;">
-    #                                         Real time face emotion recognition of webcam feed using OpenCV, DeepFace and Streamlit.</h4>
-    #                                         </div>
-    #                                         </br>"""
-    #     st.markdown(html_temp_home1, unsafe_allow_html=True)
-    #     facesentiment()
-
-    # elif choice == "About":
-    #     st.subheader("About this app")
-
-    #     html_temp4 = """
-    #                                  		<div style="background-color:#98AFC7;padding:10px">
-    #                                  		<h4 style="color:white;text-align:center;">This Application is developed by Shrimanta Satpati. </h4>
-    #                                  		<h4 style="color:white;text-align:center;">Thanks for Visiting</h4>
-    #                                  		</div>
-    #                                  		<br></br>
-    #                                  		<br></br>"""
-
-    #     st.markdown(html_temp4, unsafe_allow_html=True)
-
-    # else:
-    #     pass
 
 if __name__ == "__main__":
     main()
