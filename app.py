@@ -26,7 +26,6 @@ def overlay_text_on_frame(frame, texts):
     return frame
 
 def facesentiment():
-    # st.title("Real-Time Facial Analysis with Streamlit")
     # Create a VideoCapture object
     cap = cv2.VideoCapture(0)
     stframe = st.image([])  # Placeholder for the webcam feed
@@ -54,7 +53,6 @@ def facesentiment():
         texts = [
             f"Age: {result[0]['age']}",
             f"Face Confidence: {round(result[0]['face_confidence'],3)}",
-            # f"Gender: {result[0]['dominant_gender']} {result[0]['gender'][result[0]['dominant_gender']]}",
             f"Gender: {result[0]['dominant_gender']} {round(result[0]['gender'][result[0]['dominant_gender']], 3)}",
             f"Race: {result[0]['dominant_race']}",
             f"Dominant Emotion: {result[0]['dominant_emotion']} {round(result[0]['emotion'][result[0]['dominant_emotion']], 1)}",
