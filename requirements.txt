@@ -2,4 +2,4 @@ opencv-python-headless
 deepface
 av
 streamlit-webrtc
-tensorflow-cpu==2.15.0
+tf-keras
