@@ -1,72 +1,97 @@
+import av
 import cv2
 import streamlit as st
-import numpy as np
 from deepface import DeepFace
+from streamlit_webrtc import webrtc_streamer, VideoProcessorBase
 
-# Function to analyze facial attributes using DeepFace
-def analyze_frame(frame):
-    result = DeepFace.analyze(img_path=frame, actions=['age', 'gender', 'race', 'emotion'],
-                              enforce_detection=False,
-                              detector_backend="opencv",
-                              align=True,
-                              silent=False)
-    return result
 
 def overlay_text_on_frame(frame, texts):
+    """Draw a translucent header bar with a few lines of text on top of the frame."""
     overlay = frame.copy()
-    alpha = 0.9  # Adjust the transparency of the overlay
-    cv2.rectangle(overlay, (0, 0), (frame.shape[1], 100), (255, 255, 255), -1)  # White rectangle
+    alpha = 0.9
+    cv2.rectangle(overlay, (0, 0), (frame.shape[1], 100), (255, 255, 255), -1)
     cv2.addWeighted(overlay, alpha, frame, 1 - alpha, 0, frame)
 
-    text_position = 15 # Where the first text is put into the overlay
+    text_position = 15
     for text in texts:
-        cv2.putText(frame, text, (10, text_position), cv2.FONT_HERSHEY_TRIPLEX, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
+        cv2.putText(
+            frame, text, (10, text_position),
+            cv2.FONT_HERSHEY_TRIPLEX, 0.5, (0, 0, 0), 1, cv2.LINE_AA
+        )
         text_position += 20
-
     return frame
 
-def facesentiment():
-    # Create a VideoCapture object
-    cap = cv2.VideoCapture(0)
-    stframe = st.image([])  # Placeholder for the webcam feed
 
-    while True:
-        # Capture frame-by-frame
-        ret, frame = cap.read()
+class EmotionProcessor(VideoProcessorBase):
+    """
+    Runs once per incoming video frame from the browser.
+    All DeepFace calls are wrapped so a single bad/faceless frame
+    never crashes the whole stream.
+    """
 
-        # Analyze the frame using DeepFace
-        result = analyze_frame(frame)
+    def recv(self, frame):
+        img = frame.to_ndarray(format="bgr24")
 
-        # Extract the face coordinates
-        face_coordinates = result[0]["region"]
-        x, y, w, h = face_coordinates['x'], face_coordinates['y'], face_coordinates['w'], face_coordinates['h']
+        try:
+            result = DeepFace.analyze(
+                img_path=img,
+                actions=['age', 'gender', 'race', 'emotion'],
+                enforce_detection=False,
+                detector_backend="opencv",
+                align=True,
+                silent=True,
+            )
+        except Exception:
+            # Analysis failed for this frame (e.g. decoder hiccup) -- skip it, keep streaming
+            return av.VideoFrame.from_ndarray(img, format="bgr24")
 
-        # Draw bounding box around the face
-        cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
-        text = f"{result[0]['dominant_emotion']}"
-        cv2.putText(frame, text, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1, cv2.LINE_AA)
+        # DeepFace can return an empty list, or a region with ~0 confidence,
+        # when no face is actually present -- guard against both.
+        if not result:
+            return av.VideoFrame.from_ndarray(img, format="bgr24")
 
-        # Convert the BGR frame to RGB for Streamlit
-        frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        face = result[0]
+        region = face.get("region", {})
+        w, h = region.get("w", 0), region.get("h", 0)
 
-        # Overlay white rectangle with text on the frame
+        # Skip drawing/overlay if there's effectively no real face box
+        if w <= 0 or h <= 0:
+            return av.VideoFrame.from_ndarray(img, format="bgr24")
+
+        x, y = region.get("x", 0), region.get("y", 0)
+
+        cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
+        cv2.putText(
+            img, face["dominant_emotion"], (x, y - 10),
+            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1, cv2.LINE_AA
+        )
+
         texts = [
-            f"Age: {result[0]['age']}",
-            f"Face Confidence: {round(result[0]['face_confidence'],3)}",
-            f"Gender: {result[0]['dominant_gender']} {round(result[0]['gender'][result[0]['dominant_gender']], 3)}",
-            f"Race: {result[0]['dominant_race']}",
-            f"Dominant Emotion: {result[0]['dominant_emotion']} {round(result[0]['emotion'][result[0]['dominant_emotion']], 1)}",
+            f"Age: {face['age']}",
+            f"Face Confidence: {round(face.get('face_confidence', 0), 3)}",
+            f"Gender: {face['dominant_gender']} "
+            f"{round(face['gender'][face['dominant_gender']], 3)}",
+            f"Race: {face['dominant_race']}",
+            f"Dominant Emotion: {face['dominant_emotion']} "
+            f"{round(face['emotion'][face['dominant_emotion']], 1)}",
         ]
+        img = overlay_text_on_frame(img, texts)
 
-        frame_with_overlay = overlay_text_on_frame(frame_rgb, texts)
+        return av.VideoFrame.from_ndarray(img, format="bgr24")
 
-        # Display the frame in Streamlit
-        stframe.image(frame_with_overlay, channels="RGB")
 
 def main():
-    # Face Analysis Application #
     st.title("🎥 Real Time Emotion Detection")
-    facesentiment()
+    st.caption(
+        "Uses your browser's camera (via WebRTC) so this also works "
+        "when the app is deployed to Streamlit Cloud."
+    )
+    webrtc_streamer(
+        key="emotion-detection",
+        video_processor_factory=EmotionProcessor,
+        media_stream_constraints={"video": True, "audio": False},
+    )
+
 
 if __name__ == "__main__":
     main()
