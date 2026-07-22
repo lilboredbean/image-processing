@@ -1,4 +1,3 @@
 opencv-python
 deepface
-cv2
-pip
+
