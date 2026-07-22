@@ -4,9 +4,7 @@ import streamlit as st
 from deepface import DeepFace
 from streamlit_webrtc import webrtc_streamer, VideoProcessorBase
 
-
 def overlay_text_on_frame(frame, texts):
-    """Draw a translucent header bar with a few lines of text on top of the frame."""
     overlay = frame.copy()
     alpha = 0.9
     cv2.rectangle(overlay, (0, 0), (frame.shape[1], 100), (255, 255, 255), -1)
@@ -23,11 +21,6 @@ def overlay_text_on_frame(frame, texts):
 
 
 class EmotionProcessor(VideoProcessorBase):
-    """
-    Runs once per incoming video frame from the browser.
-    All DeepFace calls are wrapped so a single bad/faceless frame
-    never crashes the whole stream.
-    """
 
     def recv(self, frame):
         img = frame.to_ndarray(format="bgr24")
@@ -82,10 +75,6 @@ class EmotionProcessor(VideoProcessorBase):
 
 def main():
     st.title("🎥 Real Time Emotion Detection")
-    st.caption(
-        "Uses your browser's camera (via WebRTC) so this also works "
-        "when the app is deployed to Streamlit Cloud."
-    )
     webrtc_streamer(
         key="emotion-detection",
         video_processor_factory=EmotionProcessor,
