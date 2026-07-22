@@ -6,7 +6,21 @@ from deepface import DeepFace
 from streamlit_webrtc import webrtc_streamer, VideoProcessorBase, RTCConfiguration
 
 RTC_CONFIGURATION = RTCConfiguration(
-    {"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]}
+    {
+        "iceServers": [
+            {"urls": ["stun:stun.relay.metered.ca:80"]},
+            {
+                "urls": ["turn:global.relay.metered.ca:80"],
+                "username": "your_username",
+                "credential": "your_credential",
+            },
+            {
+                "urls": ["turn:global.relay.metered.ca:443"],
+                "username": "your_username",
+                "credential": "your_credential",
+            },
+        ]
+    }
 )
 
 
