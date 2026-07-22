@@ -5,3 +5,4 @@ deepface>=0.0.79
 av>=10.0.0
 numpy>=1.24.0
 tensorflow>=2.12.0
+tf-keras
