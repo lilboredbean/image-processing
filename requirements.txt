@@ -1,5 +1,4 @@
 streamlit==1.60.0
-tornado==6.4.1
 streamlit-webrtc==0.47.7
 opencv-python-headless==4.10.0.84
 deepface==0.0.93
