@@ -50,8 +50,8 @@ class EmotionVideoProcessor(VideoProcessorBase):
             try:
                 result = analyze_frame(img)
                 self.last_result = result
-            except Exception:
-                pass
+            except Exception as e:
+                print(f"[DeepFace ERROR]: {e}")
 
         result = self.last_result
         if result:
