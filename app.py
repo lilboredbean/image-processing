@@ -1,4 +1,4 @@
-import opencv-python as cv2
+import cv2
 import streamlit as st
 import numpy as np
 from deepface import DeepFace
