@@ -2,8 +2,7 @@ streamlit==1.60.0
 streamlit-webrtc==0.47.7
 opencv-python-headless==4.10.0.84
 deepface==0.0.93
-tensorflow-cpu==2.15.0
-tf-keras==2.15.0
+tensorflow==2.16.2
+tf-keras==2.16.0
 av==12.3.0
 numpy==1.26.4
-pip
